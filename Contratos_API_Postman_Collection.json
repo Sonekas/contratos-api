@@ -1,0 +1,434 @@
+{
+	"info": {
+		"_postman_id": "a_unique_id_will_be_generated",
+		"name": "Contratos API - Entrega 1",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Autenticação",
+			"item": [
+				{
+					"name": "Registrar Usuário",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"testuser\",\n    \"password\": \"testpassword\",\n    \"perfil\": \"leitor\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/auth/register",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login Usuário",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"pm.environment.set(\"access_token\", jsonData.access_token);",
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test(\"Access token is present\", function () {",
+									"    pm.expect(jsonData.access_token).to.be.a(\'string\');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "username",
+									"value": "admin"
+								},
+								{
+									"key": "password",
+									"value": "admin123"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/api/auth/login",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Obter Usuário Atual",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/auth/me",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"me"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Fornecedores",
+			"item": [
+				{
+					"name": "Listar Fornecedores",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/fornecedores/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"fornecedores",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Criar Fornecedor (Admin)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"pm.environment.set(\"fornecedor_id\", jsonData.id);",
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nome\": \"Fornecedor Teste\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/fornecedores/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"fornecedores",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Obter Fornecedor por ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/fornecedores/{{fornecedor_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"fornecedores",
+								"{{fornecedor_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Atualizar Fornecedor (Admin)",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nome\": \"Fornecedor Teste Atualizado\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/fornecedores/{{fornecedor_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"fornecedores",
+								"{{fornecedor_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Deletar Fornecedor (Admin)",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/fornecedores/{{fornecedor_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"fornecedores",
+								"{{fornecedor_id}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Contratos",
+			"item": [
+				{
+					"name": "Listar Contratos",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/contratos/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"contratos",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Criar Contrato (Admin)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"pm.environment.set(\"contrato_id\", jsonData.id);",
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"numero\": \"CONTRATO-001\",\n    \"objeto\": \"Serviços de consultoria\",\n    \"valor\": 15000.00,\n    \"fornecedor_id\": {{fornecedor_id}}\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/contratos/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"contratos",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Obter Contrato por ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/contratos/{{contrato_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"contratos",
+								"{{contrato_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Atualizar Contrato (Admin)",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"objeto\": \"Serviços de consultoria e desenvolvimento\",\n    \"valor\": 18000.00\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/contratos/{{contrato_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"contratos",
+								"{{contrato_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Deletar Contrato (Admin)",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/contratos/{{contrato_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"contratos",
+								"{{contrato_id}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
+
