@@ -98,6 +98,3 @@ Consulte `data_modeling.md` e `er_diagram.png` para detalhes sobre a modelagem d
 
 Este projeto segue o padrão Git Flow. As contribuições devem ser feitas através de branches de feature e pull requests para a branch `develop`.
 
-## Licença
-
-[Adicionar informações de licença, se aplicável]
